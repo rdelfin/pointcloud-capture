@@ -41,9 +41,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <ExecutablePath>C:\Program Files\PCL 1.8.0\bin;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <ExecutablePath>C:\Program Files\PCL 1.8.0\bin;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -52,13 +54,13 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(KINECTSDK20_DIR)/inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files\OpenNI2\Include;C:\Program Files\PCL 1.8.0\3rdParty\VTK\include;C:\Program Files\PCL 1.8.0\3rdParty\Qhull\include;C:\Program Files\PCL 1.8.0\3rdParty\FLANN\include;C:\Program Files\PCL 1.8.0\3rdParty\Eigen\eigen3;C:\Program Files\PCL 1.8.0\3rdParty\Boost\include\boost-1_61;C:\Program Files\PCL 1.8.0\include\pcl-1.8;$(KINECTSDK20_DIR)/inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(KINECTSDK20_DIR)/lib/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>kinect20.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Program Files\OpenNI2\Lib;C:\Program Files\PCL 1.8.0\3rdParty\VTK\lib;C:\Program Files\PCL 1.8.0\3rdParty\Qhull\lib;C:\Program Files\PCL 1.8.0\3rdParty\FLANN\lib;C:\Program Files\PCL 1.8.0\3rdParty\Boost\lib;C:\Program Files\PCL 1.8.0\lib;$(KINECTSDK20_DIR)/lib/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libboost_system-vc120-mt-gd-1_61.lib;libboost_filesystem-vc120-mt-gd-1_61.lib;libboost_thread-vc120-mt-gd-1_61.lib;libboost_date_time-vc120-mt-gd-1_61.lib;libboost_iostreams-vc120-mt-gd-1_61.lib;pcl_common_debug.lib;pcl_features_debug.lib;pcl_filters_debug.lib;pcl_io_debug.lib;pcl_io_ply_debug.lib;pcl_kdtree_debug.lib;pcl_keypoints_debug.lib;pcl_octree_debug.lib;pcl_registration_debug.lib;pcl_sample_consensus_debug.lib;pcl_search_debug.lib;pcl_segmentation_debug.lib;pcl_surface_debug.lib;pcl_tracking_debug.lib;pcl_visualization_debug.lib;vtkRenderingCore-7.0-gd.lib;vtkalglib-7.0-gd.lib;vtkChartsCore-7.0-gd.lib;vtkCommonCore-7.0-gd.lib;vtkDICOMParser-7.0-gd.lib;vtkexoIIc-7.0-gd.lib;vtkexpat-7.0-gd.lib;vtkFiltersCore-7.0-gd.lib;vtkFiltersGeneral-7.0-gd.lib;vtkfreetype-7.0-gd.lib;vtkFiltersGeneric-7.0-gd.lib;vtkGeovisCore-7.0-gd.lib;vtkhdf5-7.0-gd.lib;vtkFiltersHybrid-7.0-gd.lib;vtkImagingHybrid-7.0-gd.lib;vtkImagingCore-7.0-gd.lib;vtkInfovisCore-7.0-gd.lib;vtkIOCore-7.0-gd.lib;vtkjpeg-7.0-gd.lib;vtklibxml2-7.0-gd.lib;vtkmetaio-7.0-gd.lib;vtkNetCDF_cxx-7.0-gd.lib;vtkNetCDF-7.0-gd.lib;vtkpng-7.0-gd.lib;vtkproj4-7.0-gd.lib;vtksqlite-7.0-gd.lib;vtksys-7.0-gd.lib;vtktiff-7.0-gd.lib;vtkverdict-7.0-gd.lib;vtkViewsCore-7.0-gd.lib;vtkRenderingVolume-7.0-gd.lib;vtkInteractionWidgets-7.0-gd.lib;vtkzlib-7.0-gd.lib;OpenGL32.lib;kinect20.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -70,15 +72,15 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(KINECTSDK20_DIR)/inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files\OpenNI2\Include;C:\Program Files\PCL 1.8.0\3rdParty\VTK\include;C:\Program Files\PCL 1.8.0\3rdParty\Qhull\include;C:\Program Files\PCL 1.8.0\3rdParty\FLANN\include;C:\Program Files\PCL 1.8.0\3rdParty\Eigen\eigen3;C:\Program Files\PCL 1.8.0\3rdParty\Boost\include\boost-1_61;C:\Program Files\PCL 1.8.0\include\pcl-1.8;$(KINECTSDK20_DIR)/inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(KINECTSDK20_DIR)/lib/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>kinect20.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Program Files\OpenNI2\Lib;C:\Program Files\PCL 1.8.0\3rdParty\VTK\lib;C:\Program Files\PCL 1.8.0\3rdParty\Qhull\lib;C:\Program Files\PCL 1.8.0\3rdParty\FLANN\lib;C:\Program Files\PCL 1.8.0\3rdParty\Boost\lib;C:\Program Files\PCL 1.8.0\lib;$(KINECTSDK20_DIR)/lib/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libboost_system-vc120-mt-1_61.lib;libboost_filesystem-vc120-mt-1_61.lib;libboost_thread-vc120-mt-1_61.lib;libboost_date_time-vc120-mt-1_61.lib;libboost_iostreams-vc120-mt-1_61.lib;pcl_common_release.lib;pcl_features_release.lib;pcl_filters_release.lib;pcl_io_release.lib;pcl_io_ply_release.lib;pcl_kdtree_release.lib;pcl_keypoints_release.lib;pcl_octree_release.lib;pcl_registration_release.lib;pcl_sample_consensus_release.lib;pcl_search_release.lib;pcl_segmentation_release.lib;pcl_surface_release.lib;pcl_tracking_release.lib;pcl_visualization_release.lib;vtkRenderingCore-7.0.lib;vtkalglib-7.0.lib;vtkChartsCore-7.0.lib;vtkCommonCore-7.0.lib;vtkDICOMParser-7.0.lib;vtkexoIIc-7.0.lib;vtkexpat-7.0.lib;vtkFiltersCore-7.0.lib;vtkFiltersGeneral-7.0.lib;vtkfreetype-7.0.lib;vtkFiltersGeneric-7.0.lib;vtkGeovisCore-7.0.lib;vtkhdf5-7.0.lib;vtkFiltersHybrid-7.0.lib;vtkImagingHybrid-7.0.lib;vtkImagingCore-7.0.lib;vtkInfovisCore-7.0.lib;vtkIOCore-7.0.lib;vtkjpeg-7.0.lib;vtklibxml2-7.0.lib;vtkmetaio-7.0.lib;vtkNetCDF_cxx-7.0.lib;vtkNetCDF-7.0.lib;vtkpng-7.0.lib;vtkproj4-7.0.lib;vtksqlite-7.0.lib;vtksys-7.0.lib;vtktiff-7.0.lib;vtkverdict-7.0.lib;vtkViewsCore-7.0.lib;vtkRenderingVolume-7.0.lib;vtkInteractionWidgets-7.0.lib;vtkzlib-7.0.lib;OpenGL32.lib;kinect20.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
