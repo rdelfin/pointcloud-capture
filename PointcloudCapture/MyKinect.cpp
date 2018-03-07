@@ -20,11 +20,16 @@ bool MyKinect::kinect_init() {
 		this->sensor->OpenMultiSourceFrameReader(
 			FrameSourceTypes::FrameSourceTypes_Depth | FrameSourceTypes::FrameSourceTypes_Color,
 			&this->reader);
-		return this->reader;
+		return this->reader != NULL;
 	}
 	else {
 		return false;
 	}
+}
+
+const pcl::PointCloud<pcl::PointXYZRGB>& MyKinect::get_pointcloud() {
+	this->get_kinect_data();
+	return this->cloud;
 }
 
 void MyKinect::get_kinect_data() {
@@ -32,6 +37,22 @@ void MyKinect::get_kinect_data() {
 	if (SUCCEEDED(reader->AcquireLatestFrame(&frame))) {
 		this->get_depth_data(frame);
 		this->get_rgb_data(frame);
+		this->cloud.clear();
+		this->cloud.width = POINTS_WIDTH;
+		this->cloud.height = POINTS_HEIGHT;
+		this->cloud.is_dense = false;
+		this->cloud.resize(POINTS_WIDTH*POINTS_HEIGHT);
+
+		for (size_t i = 0; i < POINTS_WIDTH*POINTS_HEIGHT; i++) {
+			pcl::PointXYZRGB point;
+			point.x = depth_points[i].X;
+			point.y = depth_points[i].Y;
+			point.z = depth_points[i].Z;
+			point.r = image_colors[i].r;
+			point.g = image_colors[i].g;
+			point.b = image_colors[i].b;
+			this->cloud.points[i] = point;
+		}
 	}
 	if (frame) frame->Release();
 }
@@ -74,13 +95,13 @@ void MyKinect::get_rgb_data(IMultiSourceFrame* frame) {
 
 	const int IMG_SIZE = COLOR_WIDTH * COLOR_HEIGHT;
 	this->image_data.resize(IMG_SIZE * 4);
-	this->image_colors.resize(IMG_SIZE);
+	this->image_colors.resize(POINTS_WIDTH*POINTS_HEIGHT);
 
 	// Get data from frame
 	colorframe->CopyConvertedFrameDataToArray(IMG_SIZE * 4, &this->image_data[0], ColorImageFormat_Rgba);
 	
 	// Write color array for vertices
-	for (int i = 0; i < IMG_SIZE; i++) {
+	for (int i = 0; i < POINTS_WIDTH*POINTS_HEIGHT; i++) {
 		ColorSpacePoint p = this->color_points[i];
 		// Check if color pixel coordinates are in bounds
 		// Intentionally skipping the alpha channel

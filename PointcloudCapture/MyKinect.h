@@ -16,6 +16,9 @@ class MyKinect
 {
 public:
 	MyKinect();
+
+	const pcl::PointCloud<pcl::PointXYZRGB>& get_pointcloud();
+
 	~MyKinect();
 
 private:
@@ -29,7 +32,7 @@ private:
 	std::vector<uint8_t> image_data;
 	std::vector<Color> image_colors;
 
-	pcl::PointCloud<pcl::PointXYZ> cloud;
+	pcl::PointCloud<pcl::PointXYZRGB> cloud;
 
 	IKinectSensor * sensor;             // Kinect sensor
 	IMultiSourceFrameReader* reader;   // Kinect data source
