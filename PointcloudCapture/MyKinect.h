@@ -24,9 +24,9 @@ private:
 	void get_rgb_data(IMultiSourceFrame* frame);
 
 	std::vector<CameraSpacePoint> depth_points;
-	std::vector<ColorSpacePoint>& color_points;
-	std::vector<uint8_t>& image_data;
-	std::vector<Color>& image_colors;
+	std::vector<ColorSpacePoint> color_points;
+	std::vector<uint8_t> image_data;
+	std::vector<Color> image_colors;
 
 	IKinectSensor * sensor;             // Kinect sensor
 	IMultiSourceFrameReader* reader;   // Kinect data source
