@@ -27,6 +27,15 @@ bool MyKinect::kinect_init() {
 	}
 }
 
+void MyKinect::get_kinect_data() {
+	IMultiSourceFrame* frame = NULL;
+	if (SUCCEEDED(reader->AcquireLatestFrame(&frame))) {
+		this->get_depth_data(frame);
+		this->get_rgb_data(frame);
+	}
+	if (frame) frame->Release();
+}
+
 void MyKinect::get_depth_data(IMultiSourceFrame* frame) {
 	IDepthFrame* depthframe;
 	IDepthFrameReference* frameref = NULL;

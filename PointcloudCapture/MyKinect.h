@@ -22,11 +22,14 @@ private:
 	bool kinect_init();
 	void get_depth_data(IMultiSourceFrame* frame);
 	void get_rgb_data(IMultiSourceFrame* frame);
+	void get_kinect_data();
 
 	std::vector<CameraSpacePoint> depth_points;
 	std::vector<ColorSpacePoint> color_points;
 	std::vector<uint8_t> image_data;
 	std::vector<Color> image_colors;
+
+	pcl::PointCloud<pcl::PointXYZ> cloud;
 
 	IKinectSensor * sensor;             // Kinect sensor
 	IMultiSourceFrameReader* reader;   // Kinect data source
