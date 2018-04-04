@@ -1,27 +1,25 @@
-cmake_minimum_required( VERSION 2.8 )
-set( CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH} )
+cmake_minimum_required(VERSION 2.8)
+project(kinect_pcl_bridge)
 
-project( sample )
-add_executable( sample main.cpp )
-set_property( DIRECTORY PROPERTY VS_STARTUP_PROJECT "sample" )
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
+
+add_executable(kinect_reader main.cpp)
+set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT "kinect_reader")
 
 # Find Packages
-find_package( PCL REQUIRED )
-find_package( KinectSDK2 REQUIRED )
+find_package(PCL REQUIRED)
+find_package(KinectSDK2 REQUIRED)
 
-if( PCL_FOUND AND KinectSDK2_FOUND )
-  # Additional Include Directories
-  include_directories( ${PCL_INCLUDE_DIRS} )
-  include_directories( ${KinectSDK2_INCLUDE_DIRS} )
+include_directories(${PCL_INCLUDE_DIRS})
+include_directories(${KinectSDK2_INCLUDE_DIRS})
 
-  # Preprocessor Definitions
-  add_definitions( ${PCL_DEFINITIONS} )
+# Preprocessor Definitions
+add_definitions(${PCL_DEFINITIONS})
 
-  # Additional Library Directories
-  link_directories( ${PCL_LIBRARY_DIRS} )
-  link_directories( ${KinectSDK2_LIBRARY_DIRS} )
+# Additional Library Directories
+link_directories(${PCL_LIBRARY_DIRS})
+link_directories(${KinectSDK2_LIBRARY_DIRS})
 
-  # Additional Dependencies
-  target_link_libraries( sample ${PCL_LIBRARIES} )
-  target_link_libraries( sample ${KinectSDK2_LIBRARIES} )
-endif()
+# Additional Dependencies
+target_link_libraries(kinect_reader ${PCL_LIBRARIES})
+target_link_libraries(kinect_reader ${KinectSDK2_LIBRARIES})
