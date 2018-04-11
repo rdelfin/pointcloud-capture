@@ -15,6 +15,8 @@
 #include <iphlpapi.h>
 #include <stdio.h>
 
+#include "net_client.h"
+
 #include <pcl/visualization/pcl_visualizer.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_types.h>
