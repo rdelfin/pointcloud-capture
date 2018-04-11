@@ -1,11 +1,20 @@
 // Shamelessly solen from https://gist.github.com/UnaNancyOwen/fc7b62cc069fef74e0e096db3dd0a856
 
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+
 #include <sstream>
 #include <stdexcept>
 
 #define NOMINMAX
 #include <Windows.h>
 #include <Kinect.h>
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#include <iphlpapi.h>
+#include <stdio.h>
+
 #include <pcl/visualization/pcl_visualizer.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_types.h>
@@ -310,8 +319,22 @@ private:
     }
 };
 
+void initializeWinsock() {
+    WSADATA wsaData;
+    int error;
+
+    // Initialize Winsock
+    error = WSAStartup(MAKEWORD(2,2), &wsaData);
+    if (error != 0) {
+        printf("WSAStartup failed: %d\n", error);
+        exit(1);
+    }
+}
+
 int main( int argc, char* argv[] )
 {
+    initializeWinsock();
+
     try{
         Kinect kinect;
         kinect.run();
