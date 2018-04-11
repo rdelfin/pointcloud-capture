@@ -3,7 +3,7 @@ project(kinect_pcl_bridge)
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
-add_executable(kinect_reader main.cpp)
+add_executable(kinect_reader main.cpp net_client.cpp)
 set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT "kinect_reader")
 
 # Find Packages
