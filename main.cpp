@@ -8,14 +8,8 @@
 #include <stdexcept>
 
 #define NOMINMAX
-#include <Windows.h>
-#include <Kinect.h>
-#include <winsock2.h>
-#include <ws2tcpip.h>
-#include <iphlpapi.h>
-#include <stdio.h>
 
-#include "net_client.h"
+#include "net_client.hpp"
 
 #include <pcl/visualization/pcl_visualizer.h>
 #include <pcl/io/pcd_io.h>
@@ -61,12 +55,15 @@ private:
     boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
     pcl::PointCloud<pcl::PointXYZRGBA>::Ptr cloud;
 
+    // Network client
+    NetClient client;
+
 public:
     // Constructor
-    Kinect()
+    Kinect(const std::string& server_ip, uint32_t port)
     {
         // Initialize
-        initialize();
+        initialize(server_ip, port);
     }
 
     // Destructor
@@ -88,14 +85,14 @@ public:
             // Show Data
             show();
 
-            // Save data to disk
-            save();
+            // Send data over network
+            send();
         }
     }
 
 private:
     // Initialize
-    void initialize()
+    void initialize(const std::string& server_ip, uint32_t port)
     {
         // Initialize Sensor
         initializeSensor();
@@ -108,6 +105,9 @@ private:
 
         // Initialize Point Cloud
         initializePointCloud();
+
+        // Initialize network connection
+        initializeNetworkClient(server_ip, port);
     }
 
     // Initialize Sensor
@@ -185,6 +185,12 @@ private:
 
         // Add Coordinate System
         viewer->addCoordinateSystem( 0.1 );
+    }
+
+    inline void initializeNetworkClient(const std::string& server_ip, uint32_t port) {
+        this->client = NetClient(server_ip, port);
+        if(!this->client.connect_client())
+            std::cerr << "ERROR: There was an issue connecting to the client." << std::endl;
     }
 
     // Finalize
@@ -305,8 +311,8 @@ private:
         showPointCloud();
     }
 
-    void save() {
-        savePointCloud();
+    void send() {
+        sendPointCloud();
     }
 
     // Show Point Cloud
@@ -316,8 +322,13 @@ private:
         viewer->spinOnce();
     }
 
-    inline void savePointCloud() {
-        pcl::io::savePCDFileASCII ("kinect_pointcloud.pcd", *cloud);
+    inline void sendPointCloud() {
+        if(this->client.is_open()) {
+            if(!this->client.send_pointcloud(this->cloud);
+
+        } else {
+            std::cerr << "WARNING: Client is not open. Skipping send..." << std::endl;
+        }
     }
 };
 

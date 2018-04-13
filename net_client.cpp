@@ -9,10 +9,12 @@
     pointer += sizeof(data);               \
 }
 
-NetClient::NetClient(const string& server_url, uint32_t server_port)
+NetClient::NetClient(const std::string& server_url, uint32_t server_port)
     : server_url(server_url), server_port(server_port), open(false) {
 
 }
+
+bool NetClient::is_open() { return this->open; }
 
 bool NetClient::setup_socket() {
     int error;
@@ -99,7 +101,7 @@ bool NetClient::handshake() {
     return false;
 }
 
-bool NetClient::connect_socket() {
+bool NetClient::connect_client() {
     if(!setup_socket())
         return false;
     if(!handshake())
@@ -113,15 +115,15 @@ bool NetClient::send_pointcloud(pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr poi
 
     std::string header_string = "snd ";
     uint64_t bytes_length_net = htonl(serial_data_buffer.size());
-    std::vector<uint8_t> buffer;
+    std::vector<uint8_t> header_buffer;
     //                   v-- 4 for 'snd ' plus 8 for byte count
     header_buffer.resize(12);
 
-    memcpy(&buffer[0], header_string.c_str(), header_string.size());
-    memcpy(&buffer[4], &bytes_length_net, sizeof(bytes_length_net));
+    memcpy(&header_buffer[0], header_string.c_str(), header_string.size());
+    memcpy(&header_buffer[4], &bytes_length_net, sizeof(bytes_length_net));
 
     // Attempt to send the header
-    int error = send(this->connect_socket, &header_buffer[0], header_buffer.size(), 0);
+	int error = send(this->connect_socket, (char*)&header_buffer[0], header_buffer.size(), 0);
     if (error == SOCKET_ERROR) {
         printf("Header for pointcloud send failed: %d\n", WSAGetLastError());
         closesocket(this->connect_socket);
@@ -130,20 +132,22 @@ bool NetClient::send_pointcloud(pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr poi
     }
 
     // Attempt to send the header
-    int error = send(this->connect_socket, &serial_data_buffer[0], serial_data_buffer.size(), 0);
+    error = send(this->connect_socket, (char*)&serial_data_buffer[0], serial_data_buffer.size(), 0);
     if (error == SOCKET_ERROR) {
         printf("Pointcloud data send failed: %d\n", WSAGetLastError());
         closesocket(this->connect_socket);
         WSACleanup();
         return false;
     }
+
+	return true;
 }
 
 bool NetClient::close_client() {
     if(open) {
         int error;
-
-        error = send(this->connect_socket, sendbuf, (int) strlen(sendbuf), 0);
+		char* sendbuf = "end";
+        error = send(this->connect_socket, sendbuf, (int)strlen(sendbuf), 0);
         if (error == SOCKET_ERROR) {
             printf("Close mesage send failed: %d\n", WSAGetLastError());
             printf("Skipping to shutdown.\n");
@@ -164,7 +168,6 @@ bool NetClient::close_client() {
 }
 
 void NetClient::serialize(pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr pointcloud, std::vector<uint8_t>& buffer) {
-    uint64_t offset;
     buffer.clear();
 
     // Get header data and convert to network order
@@ -176,7 +179,7 @@ void NetClient::serialize(pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr pointclou
     uint32_t seq_net = htonl(pointcloud->header.seq);
     uint64_t stamp_net = htonll(pointcloud->header.stamp);
     uint32_t width_net = htonl(pointcloud->width);
-    uint32_t heigth_net = htonl(pointcloud->height);
+    uint32_t height_net = htonl(pointcloud->height);
     uint8_t is_dense_net = pointcloud->is_dense; // Network order says the same for 1-byte data
 
     // string   frame_id  - ??? (32 + length of string, skipping)
@@ -186,7 +189,7 @@ void NetClient::serialize(pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr pointclou
     uint8_t* frame_id_ptr =&frame_id[0];
     memcpy(frame_id_ptr, &frame_id_len_net, 8);
     frame_id_ptr += 8;
-    memcpy(frame_id_ptr, pointcloud->header.frame_id.c_str());
+    memcpy(frame_id_ptr, pointcloud->header.frame_id.c_str(), pointcloud->header.frame_id.length());
 
     // Calculate bytes taken up by points              v-- xyz values    v-- RGBA values
     uint64_t point_bytes = pointcloud->points.size() * (3*sizeof(float) + 4*sizeof(uint8_t));
@@ -229,5 +232,5 @@ void NetClient::serialize(pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr pointclou
 }
 
 NetClient::~NetClient() {
-    close();
+    close_client();
 }
