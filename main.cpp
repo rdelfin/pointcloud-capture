@@ -15,6 +15,7 @@
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_types.h>
 
+#include <Kinect.h>
 #include <wrl/client.h>
 using namespace Microsoft::WRL;
 
@@ -324,7 +325,9 @@ private:
 
     inline void sendPointCloud() {
         if(this->client.is_open()) {
-            if(!this->client.send_pointcloud(this->cloud);
+            if(!this->client.send_pointcloud(this->cloud)) {
+                std::cerr << "ERROR: Could no send pointcloud." << std::endl;
+            }
 
         } else {
             std::cerr << "WARNING: Client is not open. Skipping send..." << std::endl;
@@ -346,10 +349,16 @@ void initializeWinsock() {
 
 int main( int argc, char* argv[] )
 {
+    std::string ip_address;
+    if(argc > 1)
+        ip_address = std::string(argv[1]);
+    else
+        ip_address = "10.0.0.5";
+
     initializeWinsock();
 
     try{
-        Kinect kinect;
+        Kinect kinect(ip_address, 5525);
         kinect.run();
     } catch( std::exception& ex ){
         std::cout << ex.what() << std::endl;

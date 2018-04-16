@@ -9,6 +9,8 @@
     pointer += sizeof(data);               \
 }
 
+NetClient::NetClient() { }
+
 NetClient::NetClient(const std::string& server_url, uint32_t server_port)
     : server_url(server_url), server_port(server_port), open(false) {
 

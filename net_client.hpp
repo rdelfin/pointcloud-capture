@@ -26,6 +26,7 @@ const std::string CLOSE_MSG = "close";
 
 class NetClient {
 public:
+    NetClient();
     NetClient(const std::string& server_url, uint32_t server_port);
     bool connect_client();
     bool send_pointcloud(pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr pointcloud);
