@@ -173,22 +173,24 @@ void NetClient::serialize(pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr pointclou
     buffer.clear();
 
     // Get header data and convert to network order
-    // uint32_t seq       - 32
-    // uint64_t stamp     - 96
-    // uint32_t width     - 128
-    // uint32_t height    - 160
-    // uint8_t  is_dense  - 168
+    // uint32_t seq         - 32
+    // uint64_t stamp       - 96
+    // uint32_t width       - 128
+    // uint32_t height      - 160
+    // uint8_t  is_dense    - 168
+    // uint64_t point_count - 232 (or 29 bytes)
     uint32_t seq_net = htonl(pointcloud->header.seq);
     uint64_t stamp_net = htonll(pointcloud->header.stamp);
     uint32_t width_net = htonl(pointcloud->width);
     uint32_t height_net = htonl(pointcloud->height);
     uint8_t is_dense_net = pointcloud->is_dense; // Network order says the same for 1-byte data
+    uint64_t point_count_net = htonll(pointcloud->points.size());
 
     // string   frame_id  - ??? (32 + length of string, skipping)
     std::vector<uint8_t> frame_id;
     uint64_t frame_id_len_net = htonll(pointcloud->header.frame_id.length());
     frame_id.resize(8 + pointcloud->header.frame_id.length());
-    uint8_t* frame_id_ptr =&frame_id[0];
+    uint8_t* frame_id_ptr = &frame_id[0];
     memcpy(frame_id_ptr, &frame_id_len_net, 8);
     frame_id_ptr += 8;
     memcpy(frame_id_ptr, pointcloud->header.frame_id.c_str(), pointcloud->header.frame_id.length());
@@ -198,7 +200,7 @@ void NetClient::serialize(pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr pointclou
     
     // Resize the data buffer to the size needed by the pointcloud
     //            v-- Header data  v-- Frame id      v-- pointcloud
-    buffer.resize(168 +            frame_id.size() + point_bytes);
+    buffer.resize(29 +             frame_id.size() + point_bytes);
 
     uint8_t* buf_ptr = &buffer[0];
 
@@ -210,6 +212,7 @@ void NetClient::serialize(pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr pointclou
     COPY_DATA(buf_ptr, width_net);
     COPY_DATA(buf_ptr, height_net);
     COPY_DATA(buf_ptr, is_dense_net);
+    COPY_DATA(buf_ptr, point_count_net);
 
     // Copy pointcloud
     for(pcl::PointXYZRGBA point : pointcloud->points) {

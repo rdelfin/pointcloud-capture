@@ -95,6 +95,9 @@ private:
     // Initialize
     void initialize(const std::string& server_ip, uint32_t port)
     {
+        // Initialize network connection
+        initializeNetworkClient(server_ip, port);
+        
         // Initialize Sensor
         initializeSensor();
 
@@ -106,9 +109,6 @@ private:
 
         // Initialize Point Cloud
         initializePointCloud();
-
-        // Initialize network connection
-        initializeNetworkClient(server_ip, port);
     }
 
     // Initialize Sensor
@@ -192,6 +192,8 @@ private:
         this->client = NetClient(server_ip, port);
         if(!this->client.connect_client())
             std::cerr << "ERROR: There was an issue connecting to the client." << std::endl;
+        else
+            std::cerr << "Connected to client successfully." << std::endl;
     }
 
     // Finalize
